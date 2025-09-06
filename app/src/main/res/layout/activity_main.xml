@@ -1,0 +1,95 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    >
+        <!-- Email server config -->
+        <EditText
+            android:id="@+id/input_host"
+            android:hint="Host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+        />
+
+        <EditText
+            android:id="@+id/input_port"
+            android:hint="Port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+        />
+
+        <EditText
+            android:id="@+id/input_user"
+            android:hint="Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+        />
+
+        <EditText
+            android:id="@+id/input_pass"
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+        />
+
+        <EditText
+            android:id="@+id/input_from"
+            android:hint="From"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+        />
+
+        <EditText
+            android:id="@+id/input_to"
+            android:hint="To"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+        />
+
+        <EditText
+            android:id="@+id/input_subject"
+            android:hint="Subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+        />
+
+        <!-- Last message timestamp -->
+        <EditText
+            android:id="@+id/input_last_timestamp"
+            android:hint="Last Message Timestamp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+        />
+
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/button_save"
+            android:text="Save Config"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+        />
+
+        <Button
+            android:id="@+id/button_sync"
+            android:text="Manual Sync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+        />
+    </LinearLayout>
+</ScrollView>

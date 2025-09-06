@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace "com.example.smsmail"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.smsmail"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+    
+  
+
+    packaging {
+        resources {
+            excludes += [
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE*",
+                "META-INF/NOTICE*",
+                "META-INF/DEPENDENCIES",
+                "META-INF/NOTICE.md",
+                "META-INF/*.kotlin_module"
+            ]
+        }
+    }
+}
+
+dependencies {
+    // implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.sun.mail:jakarta.mail:2.0.1"
+    implementation "com.sun.activation:jakarta.activation:2.0.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.work:work-runtime:2.9.0"
+}
