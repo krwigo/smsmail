@@ -24,10 +24,10 @@ public class WorkerHelper {
         // APPEND: queue this request after the existing work chain, ensuring sequential execution
 
         WorkManager.getInstance(context).enqueueUniqueWork(
-                "sms_worker",
-                // ExistingWorkPolicy.KEEP,
-                ExistingWorkPolicy.APPEND,
-                request
-            );
+            "sms_worker",
+            // ExistingWorkPolicy.KEEP,
+            ExistingWorkPolicy.APPEND,
+            request
+        );
     }
 }

@@ -43,6 +43,8 @@ public class MainActivity extends Activity {
 
         requestSmsPermissions();
 
+        ConnectivityHelper.register(this);
+
         save.setOnClickListener(v -> {
             saveConfig();
             Toast.makeText(this, "saveConfig", Toast.LENGTH_SHORT).show();
