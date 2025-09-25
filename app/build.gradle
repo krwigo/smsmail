@@ -14,14 +14,24 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file(MY_KEYSTORE_FILE)
+            storePassword MY_KEYSTORE_PASSWORD
+            keyAlias MY_KEY_ALIAS
+            keyPassword MY_KEY_PASSWORD
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             signingConfig signingConfigs.debug
         }
     }
-    
-  
 
     packaging {
         resources {
@@ -38,7 +48,6 @@ android {
 }
 
 dependencies {
-    // implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.sun.mail:jakarta.mail:2.0.1"
     implementation "com.sun.activation:jakarta.activation:2.0.1"
     implementation "androidx.appcompat:appcompat:1.6.1"
