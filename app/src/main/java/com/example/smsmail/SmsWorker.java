@@ -23,13 +23,20 @@ public class SmsWorker extends Worker {
     public Result doWork() {
         Log.d("SMSMAIL", "SmsWorker.doWork");
         try {
-            Log.d("SMSMAIL", "SmsWorker.doWork before");
-            SyncManager.run(getApplicationContext());
-            Log.d("SMSMAIL", "SmsWorker.doWork after");
-            return Result.success();
+            SyncManager.SyncResult result = SyncManager.run(
+                getApplicationContext()
+            );
+            switch (result) {
+                case SUCCESS:
+                    return Result.success();
+                case CONFIG_ERROR:
+                    return Result.failure();
+                case RETRY:
+                default:
+                    return Result.retry();
+            }
         } catch (Exception e) {
-            Log.d("SMSMAIL", "SmsWorker.doWork catch");
-            e.printStackTrace();
+            Log.e("SMSMAIL", "SmsWorker.doWork failed", e);
             return Result.retry();
         }
     }

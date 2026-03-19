@@ -12,7 +12,8 @@ public class BootReceiver extends BroadcastReceiver {
         Log.d("SMSMAIL", "BootReceiver.BootReceiver");
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Log.d("SMSMAIL", "BootReceiver.BootReceiver (equals)");
-            WorkerHelper.enqueueSmsWorker(context);
+            WorkerHelper.ensurePeriodicSync(context);
+            WorkerHelper.enqueueImmediateSync(context);
         }
     }
 }

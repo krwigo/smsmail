@@ -15,14 +15,59 @@ import java.util.Properties;
 
 public class Mailer {
 
-    public static boolean sendMail(
+    public enum DeliveryResult {
+        SUCCESS,
+        RETRYABLE_FAILURE,
+        CONFIG_ERROR,
+    }
+
+    public static DeliveryResult sendSmsMail(
         Context context,
         String fromNum,
         String body,
         long timestamp
     ) {
-        Log.d("SMSMAIL", "Mailer.sendMail");
+        String subjectPrefix = getSubjectPrefix(context);
+        String subject = subjectPrefix + " from " + fromNum;
+        String messageBody = body + "\n--\ntimestamp: " + timestamp;
+        return sendEmail(context, subject, messageBody);
+    }
 
+    public static DeliveryResult sendBatteryLowMail(
+        Context context,
+        int batteryPercent
+    ) {
+        String subjectPrefix = getSubjectPrefix(context);
+        String subject = subjectPrefix + " battery low";
+        String messageBody = "Battery is low.\n\nLevel: " + batteryPercent + "%";
+        return sendEmail(context, subject, messageBody);
+    }
+
+    public static DeliveryResult sendMissedCallMail(
+        Context context,
+        String number,
+        String cachedName,
+        long timestamp
+    ) {
+        String subjectPrefix = getSubjectPrefix(context);
+        String caller = cachedName != null && !cachedName.isEmpty()
+            ? cachedName + " (" + number + ")"
+            : number;
+        String subject = subjectPrefix + " missed call";
+        String messageBody =
+            "Missed call from: " +
+            caller +
+            "\nTimestamp: " +
+            timestamp;
+        return sendEmail(context, subject, messageBody);
+    }
+
+    private static DeliveryResult sendEmail(
+        Context context,
+        String subject,
+        String body
+    ) {
+        Log.d("SMSMAIL", "Mailer.sendEmail");
         SharedPreferences prefs = context.getSharedPreferences(
             "config",
             Context.MODE_PRIVATE
@@ -33,13 +78,12 @@ public class Mailer {
         String pass = prefs.getString("pass", "");
         String from = prefs.getString("from", user);
         String to = prefs.getString("to", user);
-        String subjectPrefix = prefs.getString("subject", "SMS");
 
         if (
             host.isEmpty() || user.isEmpty() || pass.isEmpty() || to.isEmpty()
         ) {
-            Log.d("SMSMAIL", "Mailer.sendMail !config");
-            return false;
+            Log.d("SMSMAIL", "Mailer.sendEmail !config");
+            return DeliveryResult.CONFIG_ERROR;
         }
 
         Properties props = new Properties();
@@ -65,16 +109,24 @@ public class Mailer {
                 Message.RecipientType.TO,
                 InternetAddress.parse(to)
             );
-            msg.setSubject(subjectPrefix + " from " + fromNum);
-            msg.setText(body + "\n--\ntimestamp: " + timestamp);
+            msg.setSubject(subject);
+            msg.setText(body);
 
             Transport.send(msg);
-            Log.d("SMSMAIL", "Mailer.sendMail true");
-            return true;
+            Log.d("SMSMAIL", "Mailer.sendEmail true");
+            return DeliveryResult.SUCCESS;
         } catch (MessagingException e) {
-            Log.d("SMSMAIL", "Mailer.sendMail false");
+            Log.d("SMSMAIL", "Mailer.sendEmail false");
             e.printStackTrace();
-            return false;
+            return DeliveryResult.RETRYABLE_FAILURE;
         }
+    }
+
+    private static String getSubjectPrefix(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(
+            "config",
+            Context.MODE_PRIVATE
+        );
+        return prefs.getString("subject", "SMS");
     }
 }
